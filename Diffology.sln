@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diffology.Executable", "Dif
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diffology", "Diffology\Diffology.csproj", "{F6B902E9-F3BB-4D4B-90AD-A8770371912A}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Installer", "Installer\Installer.wixproj", "{A695101A-9002-488F-BB56-7C483CDFCF26}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{C4B7F241-586A-4AEF-AF46-D585B2E31886}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,14 +57,12 @@ Global
 		{F6B902E9-F3BB-4D4B-90AD-A8770371912A}.Release|x64.Build.0 = Release|x64
 		{F6B902E9-F3BB-4D4B-90AD-A8770371912A}.Release|x86.ActiveCfg = Release|x86
 		{F6B902E9-F3BB-4D4B-90AD-A8770371912A}.Release|x86.Build.0 = Release|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Debug|x64.ActiveCfg = Debug|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Debug|x86.ActiveCfg = Debug|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Debug|x86.Build.0 = Debug|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Release|Any CPU.ActiveCfg = Release|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Release|x64.ActiveCfg = Release|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Release|x86.ActiveCfg = Release|x86
-		{A695101A-9002-488F-BB56-7C483CDFCF26}.Release|x86.Build.0 = Release|x86
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Debug|Any CPU.ActiveCfg = Debug
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Debug|x64.ActiveCfg = Debug
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Debug|x86.ActiveCfg = Debug
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Release|Any CPU.ActiveCfg = Release
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Release|x64.ActiveCfg = Release
+		{C4B7F241-586A-4AEF-AF46-D585B2E31886}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
