@@ -72,6 +72,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AlreadyInUseException.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="GitClient.cs" />
     <Compile Include="GitRet.cs" />

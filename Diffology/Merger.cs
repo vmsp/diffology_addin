@@ -28,6 +28,31 @@ namespace Diffology
         public async Task Sync(string dbPath)
         {
             _dbPath = dbPath;
+            try
+            {
+                await DoSync();
+            }
+            catch (OleDbException e)
+            {
+                HandleKnownErrors(e);
+            }
+        }
+
+        private static void HandleKnownErrors(OleDbException e)
+        {
+            foreach (OleDbError error in e.Errors)
+            {
+                // Could not use '|'; file already in use.
+                if (error.NativeError == -534643712)
+                {
+                    throw new AlreadyInUseException();
+                }
+            }
+            throw e;
+        }
+
+        private async Task DoSync()
+        {
             _dest.Reset();
             _orig.Reset();
 
@@ -76,7 +101,8 @@ namespace Diffology
                     if (tableName == Consts.DIFFOLOGY_TABLE_NAME)
                     {
                         var cmd = new OleDbCommand(
-                            $"SELECT [Value] FROM [{Consts.DIFFOLOGY_TABLE_NAME}]", cn);
+                            $"SELECT [Value] FROM [{Consts.DIFFOLOGY_TABLE_NAME}] WHERE [Key] = 'Id';",
+                            cn);
                         return (string)await cmd.ExecuteScalarAsync();
                     }
                 }
@@ -92,7 +118,7 @@ namespace Diffology
 
                 var createTable = new OleDbCommand(
                     "CREATE TABLE [" + Consts.DIFFOLOGY_TABLE_NAME + "](" +
-                    "  [ID] AUTOINCREMENT PRIMARY KEY," +
+                    "  [Id] AUTOINCREMENT PRIMARY KEY," +
                     "  [Key] TEXT NOT NULL," +
                     "  [Value] TEXT NOT NULL" +
                     ");", cn);
@@ -101,7 +127,7 @@ namespace Diffology
                 var insert = new OleDbCommand(
                     "INSERT INTO [" + Consts.DIFFOLOGY_TABLE_NAME + "]([Key], [Value]) " +
                     "VALUES (@Key, @Value);", cn);
-                insert.Parameters.Add("@Key", OleDbType.VarChar).Value = "ID";
+                insert.Parameters.Add("@Key", OleDbType.VarChar).Value = "Id";
                 insert.Parameters.Add("@Value", OleDbType.VarChar).Value = remoteId;
                 var changed = await insert.ExecuteNonQueryAsync();
 
@@ -129,7 +155,7 @@ namespace Diffology
                     }
                     // Access will let you name a table with a reserved keyword but, when using
                     // OLEDB, it won't work. We escape the table's name below. The export file
-                    // won't be as readable but it will display as it expected in Access.
+                    // won't be as readable but it will display as expected in Access.
                     tableName = $"[{tableName}]";
                     using (var adapter = NewAdapter(tableName, cn))
                     {

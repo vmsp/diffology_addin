@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Threading.Tasks;
 using NetOffice.AccessApi.Tools;
 using NetOffice.Tools;
 using Office = NetOffice.OfficeApi;
-using Access = NetOffice.AccessApi;
+using Enums = NetOffice.AccessApi.Enums;
 
 namespace Diffology.Addin
 {
@@ -32,16 +34,48 @@ namespace Diffology.Addin
         public async void OnSyncClick(Office.IRibbonControl control)
         {
             ToggleSyncEnabled(false);
-            Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdInitMeter, "Diffology Syncing...", 4);
-            Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdUpdateMeter, 3);
+            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdInitMeter, "Syncing...", 4);
+            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdUpdateMeter, 3);
 
-            await merger.Sync(Application.CurrentProject.FullName);
-            // TODO(vitor): Move this to a better place?
-            Application.RefreshDatabaseWindow();
-            Application.SetHiddenAttribute(Access.Enums.AcObjectType.acTable, Consts.DIFFOLOGY_TABLE_NAME, true);
+            try
+            {
+                await merger.Sync(Application.CurrentProject.FullName);
 
-            Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdUpdateMeter, 4);
-            Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdRemoveMeter);
+                // TODO(vitor): Move this to a better place?
+
+                // Changes to the underlying data take a bit to be propagated to system
+                // tables. The following spinlock is held until the system tables, and
+                // therefore the UI, are up to speed.
+                await Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        var count = (int)Application.DCount(
+                            "*",
+                            "MSysObjects",
+                            $"Name = '{Consts.DIFFOLOGY_TABLE_NAME}' AND Type = 1");
+                        if (count > 0) break;
+                    }
+                });
+
+                Application.SetHiddenAttribute(
+                    Enums.AcObjectType.acTable,
+                    Consts.DIFFOLOGY_TABLE_NAME,
+                    true);
+            }
+            catch (AlreadyInUseException)
+            {
+                MessageBox.Show(
+                    "No lock file was found. This usually means you are trying to " +
+                    "sync a newly created database.\n\n" +
+                    "Please save the database, reopen it and sync.",
+                    "No Lock File Found",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+
+            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdUpdateMeter, 4);
+            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdRemoveMeter);
             ToggleSyncEnabled(true);
         }
 
