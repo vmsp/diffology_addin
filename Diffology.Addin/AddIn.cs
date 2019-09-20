@@ -36,7 +36,8 @@ namespace Diffology.Addin
             Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdUpdateMeter, 3);
 
             await merger.Sync(Application.CurrentProject.FullName);
-            // TODO(vitor): Move this to a better place.
+            // TODO(vitor): Move this to a better place?
+            Application.RefreshDatabaseWindow();
             Application.SetHiddenAttribute(Access.Enums.AcObjectType.acTable, Consts.DIFFOLOGY_TABLE_NAME, true);
 
             Application.SysCmd(Access.Enums.AcSysCmdAction.acSysCmdUpdateMeter, 4);
