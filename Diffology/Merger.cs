@@ -127,6 +127,10 @@ namespace Diffology
                         // system tables, and our own table.
                         continue;
                     }
+                    // Access will let you name a table with a reserved keyword but, when using
+                    // OLEDB, it won't work. We escape the table's name below. The export file
+                    // won't be as readable but it will display as it expected in Access.
+                    tableName = $"[{tableName}]";
                     using (var adapter = NewAdapter(tableName, cn))
                     {
                         adapter.FillSchema(_dest, SchemaType.Source, tableName);
