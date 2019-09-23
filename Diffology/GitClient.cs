@@ -32,7 +32,7 @@ namespace Diffology
             //
             // '%40' should be used to escape the '@' sign.
             var path = System.IO.Path.Combine(Consts.REPO_DIR, id);
-            await Git($"clone http://{user.Name}:{user.Password}@{Consts.SERVER_ADDRESS}/repos/{id}.git {path}");
+            await Git($"clone https://{user.Name}:{user.Password}@diffology.com/repos/{id}.git {path}");
             return new GitClient(path, user);
         }
 

@@ -98,7 +98,7 @@ namespace Diffology
         async Task<Repository> CreateRemoteRepository()
         {
             var content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>());
-            var resp = await http.PostAsync($"http://172.105.152.179/repositories.json", content);
+            var resp = await http.PostAsync($"https://diffology.com/repositories.json", content);
             return JsonConvert.DeserializeObject<Repository>(await resp.Content.ReadAsStringAsync());
         }
 
