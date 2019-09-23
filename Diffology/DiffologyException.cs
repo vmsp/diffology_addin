@@ -16,14 +16,14 @@ namespace Diffology
 
         private static string OleDbMessageProvider(OleDbException e)
         {
-            var errorMessages = "OleDbErrors List:\n";
+            var errorMessages = "OleDbErrors List:" + Environment.NewLine;
             for (int i = 0; i < e.Errors.Count; i++)
             {
-                errorMessages += "Index #" + i + "\n" +
-                                 "Message: " + e.Errors[i].Message + "\n" +
-                                 "NativeError: " + e.Errors[i].NativeError + "\n" +
-                                 "Source: " + e.Errors[i].Source + "\n" +
-                                 "SQLState: " + e.Errors[i].SQLState + "\n";
+                errorMessages += "Index #" + i + Environment.NewLine +
+                                 "Message: " + e.Errors[i].Message + Environment.NewLine +
+                                 "NativeError: " + e.Errors[i].NativeError + Environment.NewLine +
+                                 "Source: " + e.Errors[i].Source + Environment.NewLine +
+                                 "SQLState: " + e.Errors[i].SQLState + Environment.NewLine;
             }
             return errorMessages;
         }
