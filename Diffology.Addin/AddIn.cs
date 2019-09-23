@@ -2,19 +2,21 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+
+using Office = NetOffice.OfficeApi;
+using NetOffice.AccessApi.Enums;
 using NetOffice.AccessApi.Tools;
 using NetOffice.Tools;
-using Office = NetOffice.OfficeApi;
-using Enums = NetOffice.AccessApi.Enums;
 
 namespace Diffology.Addin
 {
     [ComVisible(true)]
-    [COMAddin("Diffology", "Diffology", LoadBehavior.LoadAtStartup)]
-    [ProgId("Diffology.Diffology")]
-    [Guid("FF9BB59D-3418-467B-AD13-F76975A75361")]
-    [Codebase]
-    [Timestamp]
+    [COMAddin(
+        "Diffology",
+        "Share Access databases over the web with no configuration, technical or programming expertise",
+        LoadBehavior.LoadAtStartup)]
+    [ProgId("Diffology.Diffology"), Guid("FF9BB59D-3418-467B-AD13-F76975A75361")]
+    [Codebase, Timestamp]
     [CustomUI("RibbonUI.xml", true)]
     public class Addin : COMAddin
     {
@@ -34,8 +36,8 @@ namespace Diffology.Addin
         public async void OnSyncClick(Office.IRibbonControl control)
         {
             ToggleSyncEnabled(false);
-            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdInitMeter, "Syncing...", 4);
-            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdUpdateMeter, 3);
+            Application.SysCmd(AcSysCmdAction.acSysCmdInitMeter, "Syncing...", 4);
+            Application.SysCmd(AcSysCmdAction.acSysCmdUpdateMeter, 3);
 
             try
             {
@@ -59,7 +61,7 @@ namespace Diffology.Addin
                 });
 
                 Application.SetHiddenAttribute(
-                    Enums.AcObjectType.acTable,
+                    AcObjectType.acTable,
                     Consts.DIFFOLOGY_TABLE_NAME,
                     true);
             }
@@ -81,8 +83,8 @@ namespace Diffology.Addin
                 }
             }
 
-            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdUpdateMeter, 4);
-            Application.SysCmd(Enums.AcSysCmdAction.acSysCmdRemoveMeter);
+            Application.SysCmd(AcSysCmdAction.acSysCmdUpdateMeter, 4);
+            Application.SysCmd(AcSysCmdAction.acSysCmdRemoveMeter);
             ToggleSyncEnabled(true);
         }
 
