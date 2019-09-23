@@ -73,6 +73,13 @@ namespace Diffology.Addin
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
+            catch (Exception e)
+            {
+                using (var dialog = new UnhandledErrorDialog(e))
+                {
+                    dialog.ShowDialog();
+                }
+            }
 
             Application.SysCmd(Enums.AcSysCmdAction.acSysCmdUpdateMeter, 4);
             Application.SysCmd(Enums.AcSysCmdAction.acSysCmdRemoveMeter);

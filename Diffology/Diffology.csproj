@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AlreadyInUseException.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="DiffologyException.cs" />
     <Compile Include="GitClient.cs" />
     <Compile Include="GitRet.cs" />
     <Compile Include="Merger.cs" />

@@ -32,9 +32,15 @@ namespace Diffology
             {
                 await DoSync();
             }
-            catch (OleDbException e)
+            catch (Exception e)
             {
-                HandleKnownErrors(e);
+                if (e is OleDbException)
+                {
+                    var oledb = (OleDbException)e;
+                    HandleKnownErrors(oledb);
+                    throw new DiffologyException(oledb);
+                }
+                throw new DiffologyException("Unknown exception", e);
             }
         }
 
@@ -48,7 +54,6 @@ namespace Diffology
                     throw new AlreadyInUseException();
                 }
             }
-            throw e;
         }
 
         private async Task DoSync()
@@ -56,15 +61,8 @@ namespace Diffology
             _dest.Reset();
             _orig.Reset();
 
-            var id = await FetchRepositoryId();
-            if (id == null)
-            {
-                id = (await CreateRemoteRepository()).id;
-                await CreateDiffologyTable(id);
-            }
+            await InitRepo();
 
-            _repoPath = Path.Combine(Consts.REPO_DIR, id);
-            if (!Directory.Exists(_repoPath)) await GitClient.Clone(_user, id);
             var git = new GitClient(_repoPath, _user);
 
             await Task.Run(() => Export());
@@ -80,6 +78,21 @@ namespace Diffology
                 await git.Pull();
             }
             await Task.Run(() => Import());
+        }
+
+        async Task InitRepo()
+        {
+            var id = await FetchRepositoryId();
+            if (id == null)
+            {
+                id = (await CreateRemoteRepository()).id;
+                await CreateDiffologyTable(id);
+            }
+            _repoPath = Path.Combine(Consts.REPO_DIR, id);
+            if (!Directory.Exists(_repoPath))
+            {
+                await GitClient.Clone(_user, id);
+            }
         }
 
         async Task<Repository> CreateRemoteRepository()
