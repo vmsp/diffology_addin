@@ -154,13 +154,13 @@ namespace Diffology
             {
                 cn.Open();
 
-                var tables = cn.GetSchema("Tables");
+                var tables = cn.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
+                tables.Merge(cn.GetSchema("Tables", new string[] { null, null, null, "LINK" }));
+
                 for (int i = 0; i < tables.Rows.Count; ++i)
                 {
                     var tableName = tables.Rows[i][2].ToString();
-                    if (tableName[0] == '~' ||
-                        tableName.StartsWith("MSys") ||
-                        tableName == Consts.DIFFOLOGY_TABLE_NAME)
+                    if (tableName[0] == '~' || tableName == Consts.DIFFOLOGY_TABLE_NAME)
                     {
                         // Ignore temporary tables that Access creates (that start with '~'),
                         // system tables, and our own table.
