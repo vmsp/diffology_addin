@@ -13,7 +13,8 @@ namespace Diffology.Addin
     [ComVisible(true)]
     [COMAddin(
         "Diffology",
-        "Share Access databases over the web with no configuration, technical or programming expertise",
+        "Share Access databases over the web with no configuration, technical or " +
+        "programming expertise.",
         LoadBehavior.LoadAtStartup)]
     [ProgId("Diffology.Diffology"), Guid("FF9BB59D-3418-467B-AD13-F76975A75361")]
     [Codebase, Timestamp]
@@ -68,9 +69,8 @@ namespace Diffology.Addin
             catch (AlreadyInUseException)
             {
                 MessageBox.Show(
-                    "No lock file was found. This usually means you are trying to " +
-                    "sync a newly created database.\n\n" +
-                    "Please save the database, reopen it and sync.",
+                    "No lock file was found. This usually means you are trying to sync a newly " +
+                    "created database.\r\n\r\nPlease save the database, reopen it and sync.",
                     "No Lock File Found",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);

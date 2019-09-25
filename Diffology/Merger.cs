@@ -32,14 +32,13 @@ namespace Diffology
             {
                 await DoSync();
             }
+            catch (OleDbException e)
+            {
+                HandleKnownErrors(e);
+                throw new DiffologyException(e);
+            }
             catch (Exception e)
             {
-                if (e is OleDbException)
-                {
-                    var oledb = (OleDbException)e;
-                    HandleKnownErrors(oledb);
-                    throw new DiffologyException(oledb);
-                }
                 throw new DiffologyException("Unknown exception", e);
             }
         }
